@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   http:
   chat_bubbles:
+  firebase_core: ^2.10.0
+  cloud_firestore: ^4.9.0
 
 dev_dependencies:
   flutter_test:

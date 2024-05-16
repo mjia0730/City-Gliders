@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "449816959762",
+    "project_id": "citygliders-a0c40",
+    "storage_bucket": "citygliders-a0c40.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:449816959762:android:786b8399c5f79036a0f1cb",
+        "android_client_info": {
+          "package_name": "com.example.citygliders"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCspDHsFDUXSdM8G5WE7pxsupnC0N_dHKs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

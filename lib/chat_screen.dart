@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'message.dart';
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -16,6 +17,31 @@ class _ChatScreenState extends State<ChatScreen> {
   ScrollController scrollController = ScrollController();
   List<Message> msgs = [];
   bool isTyping = false;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  @override
+  void initState(){
+    super.initState();
+    loadMessages();
+  }
+
+  Future<void> loadMessages() async {
+    final snapshot = await _firestore.collection('chats').orderBy('timestamp').get();
+    setState(() {
+      msgs = snapshot.docs.map((doc){
+        final data = doc.data();
+        return Message(data['isSender'], data['msg']);
+      }).toList().reversed.toList();
+    });
+  }
+
+  Future<void> saveMessage(String text, bool isSender) async {
+    await _firestore.collection('chats').add({
+      'msg': text,
+      'isSender': isSender,
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+  }
 
   void sendMsg() async {
     String text = controller.text;
@@ -26,6 +52,8 @@ class _ChatScreenState extends State<ChatScreen> {
           msgs.insert(0, Message(true, text));
           isTyping = true;
         });
+        await saveMessage(text, true);
+
         scrollController.animateTo(0.0,
             duration: const Duration(seconds: 1), curve: Curves.easeOut);
         var response = await http.post(
@@ -47,6 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     json['response_text'])
             );
           });
+          await saveMessage(json['response_text'], false);
           scrollController.animateTo(0.0,
               duration: const Duration(seconds: 1), curve: Curves.easeOut);
         }
