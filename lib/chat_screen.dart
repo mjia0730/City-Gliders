@@ -7,11 +7,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
- 
+
   @override
   State<ChatScreen> createState() => _ChatScreenState();
 }
- 
+
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController controller = TextEditingController();
   ScrollController scrollController = ScrollController();
@@ -20,18 +20,23 @@ class _ChatScreenState extends State<ChatScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     loadMessages();
   }
 
   Future<void> loadMessages() async {
-    final snapshot = await _firestore.collection('chats').orderBy('timestamp').get();
+    final snapshot =
+        await _firestore.collection('chats').orderBy('timestamp').get();
     setState(() {
-      msgs = snapshot.docs.map((doc){
-        final data = doc.data();
-        return Message(data['isSender'], data['msg']);
-      }).toList().reversed.toList();
+      msgs = snapshot.docs
+          .map((doc) {
+            final data = doc.data();
+            return Message(data['isSender'], data['msg']);
+          })
+          .toList()
+          .reversed
+          .toList();
     });
   }
 
@@ -58,22 +63,13 @@ class _ChatScreenState extends State<ChatScreen> {
             duration: const Duration(seconds: 1), curve: Curves.easeOut);
         var response = await http.post(
             Uri.parse("https://frisbeechatbot-ulhjxrt7.b4a.run/chatbot"),
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: jsonEncode({
-              "query":  text
-            }));
+            headers: {"Content-Type": "application/json"},
+            body: jsonEncode({"query": text}));
         if (response.statusCode == 200) {
           var json = jsonDecode(response.body);
           setState(() {
             isTyping = false;
-            msgs.insert(
-                0,
-                Message(
-                    false,
-                    json['response_text'])
-            );
+            msgs.insert(0, Message(false, json['response_text']));
           });
           await saveMessage(json['response_text'], false);
           scrollController.animateTo(0.0,
@@ -90,7 +86,12 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("City Gliders"),
+        title: const Text(
+          "City Gliders",
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+        backgroundColor: Color(0xFF0060A6),
+        centerTitle: true,
       ),
       body: Column(
         children: [
@@ -105,22 +106,27 @@ class _ChatScreenState extends State<ChatScreen> {
                 reverse: true,
                 itemBuilder: (context, index) {
                   return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: isTyping && index == 0
-                          ? Column(
-                              children: [
-                                ChatBubble(text: msgs[0].msg, isSender: true, senderText: "User"),
-                                const Padding(
-                                  padding: EdgeInsets.only(left: 16, top: 4),
-                                  child: Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text("Typing...")),
-                                )
-                              ],
-                            )
-                          : ChatBubble(text: msgs[index].msg,
-                              isSender: msgs[index].isSender,
-                              senderText: msgs[index].isSender ? "User" : "Bot",),
+                    padding: const EdgeInsets.all(8.0),
+                    child: isTyping && index == 0
+                        ? Column(
+                            children: [
+                              ChatBubble(
+                                  text: msgs[0].msg,
+                                  isSender: true,
+                                  senderText: "User"),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("Typing...")),
+                              )
+                            ],
+                          )
+                        : ChatBubble(
+                            text: msgs[index].msg,
+                            isSender: msgs[index].isSender,
+                            senderText: msgs[index].isSender ? "User" : "Bot",
+                          ),
                   );
                 }),
           ),
@@ -133,7 +139,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     width: double.infinity,
                     height: 40,
                     decoration: BoxDecoration(
-                        color: Colors.grey[200],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10)),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -146,7 +152,11 @@ class _ChatScreenState extends State<ChatScreen> {
                         textInputAction: TextInputAction.send,
                         showCursor: true,
                         decoration: const InputDecoration(
-                            border: InputBorder.none, hintText: "Enter text"),
+                            border: InputBorder.none,
+                            hintText: "Ask about frisbee",
+                            hintStyle: TextStyle(fontWeight: FontWeight.w500),
+                            contentPadding:
+                                EdgeInsets.only(bottom: 8.0, left: 8.0)),
                       ),
                     ),
                   ),
@@ -160,10 +170,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                      color: Colors.blue,
+                      color: Color(0xFF0060A6),
                       borderRadius: BorderRadius.circular(30)),
                   child: const Icon(
-                    Icons.send,
+                    Icons.send_rounded,
                     color: Colors.white,
                   ),
                 ),
@@ -203,14 +213,32 @@ class ChatBubble extends StatelessWidget {
             senderText,
             style: TextStyle(
               fontSize: 12,
-              color: Colors.grey[600],
+              color: Color(0xFF0060A6),
+              fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        BubbleNormal(
-          text: text,
-          isSender: isSender,
-          color: isSender ? Colors.blue.shade100 : Colors.grey.shade200,
+        Container(
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: -50,
+                blurRadius: 6,
+                offset: isSender
+                    ? Offset(30, 58)
+                    : Offset(-30, 58), // changes position of shadow
+              ),
+            ],
+          ),
+          child: BubbleNormal(
+            text: text,
+            isSender: isSender,
+            color: isSender ? Color(0xFF0060A6) : Colors.white,
+            textStyle: TextStyle(
+              color: isSender ? Colors.white : Color(0xFF0060A6),
+            ),
+          ),
         ),
       ],
     );
