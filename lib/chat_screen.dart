@@ -219,24 +219,26 @@ class ChatBubble extends StatelessWidget {
           ),
         ),
         Container(
+          margin: isSender ? EdgeInsets.all(2.0) : EdgeInsets.only(right: 80.0, top: 8.0),
           decoration: BoxDecoration(
+            color: isSender ? Color(0xFF0060A6) : Colors.white,
+            borderRadius: BorderRadius.circular(8.0),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.5),
-                spreadRadius: -50,
-                blurRadius: 6,
-                offset: isSender
-                    ? Offset(30, 58)
-                    : Offset(-30, 58), // changes position of shadow
+                spreadRadius: 2,
+                blurRadius: 10,
+                offset: Offset(0, 4), // Adjust the shadow position if needed
               ),
             ],
           ),
-          child: BubbleNormal(
-            text: text,
-            isSender: isSender,
-            color: isSender ? Color(0xFF0060A6) : Colors.white,
-            textStyle: TextStyle(
-              color: isSender ? Colors.white : Color(0xFF0060A6),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              text,
+              style: TextStyle(
+                color: isSender ? Colors.white : Color(0xFF0060A6),
+              ),
             ),
           ),
         ),
