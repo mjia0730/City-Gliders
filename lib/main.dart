@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ChatScreen(),
+      home: const ChatScreen(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: GoogleFonts.notoSans().fontFamily),
     );
