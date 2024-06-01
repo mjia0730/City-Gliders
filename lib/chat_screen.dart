@@ -90,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
           "City Gliders",
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        backgroundColor: Color(0xFF0060A6),
+        backgroundColor: const Color(0xFF0060A6),
         centerTitle: true,
       ),
       body: Column(
@@ -170,7 +170,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                      color: Color(0xFF0060A6),
+                      color: const Color(0xFF0060A6),
                       borderRadius: BorderRadius.circular(30)),
                   child: const Icon(
                     Icons.send_rounded,
@@ -211,35 +211,19 @@ class ChatBubble extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 8.0),
           child: Text(
             senderText,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 12,
               color: Color(0xFF0060A6),
               fontWeight: FontWeight.bold,
             ),
           ),
         ),
-        Container(
-          margin: isSender ? EdgeInsets.all(2.0) : EdgeInsets.only(right: 80.0, top: 8.0),
-          decoration: BoxDecoration(
-            color: isSender ? Color(0xFF0060A6) : Colors.white,
-            borderRadius: BorderRadius.circular(20.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 2,
-                blurRadius: 10,
-                offset: Offset(0, 4), // Adjust the shadow position if needed
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                color: isSender ? Colors.white : Color(0xFF0060A6),
-              ),
-            ),
+        BubbleNormal(
+          text: text,
+          isSender: isSender,
+          color: isSender ? const Color(0xFF0060A6) : Colors.white,
+          textStyle: TextStyle(
+            color: isSender ? Colors.white : const Color(0xFF0060A6),
           ),
         ),
       ],
