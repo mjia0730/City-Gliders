@@ -30,7 +30,7 @@ class LandingPage extends StatelessWidget {
                           builder: (context, constraints) {
                             double fontSize = constraints.maxWidth * 0.06; // Adjust the multiplier as needed
                             return Text(
-                              "Welcome to City Glider's chatbot!",
+                              "Welcome to UltiBot Flick's chatbot!",
                               style: TextStyle(
                                 fontSize: fontSize,
                                 fontWeight: FontWeight.bold,
