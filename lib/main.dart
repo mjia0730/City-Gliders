@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'chat_screen.dart';
+import 'landing_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -15,7 +15,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: const ChatScreen(),
+      home: const LandingPage(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: GoogleFonts.notoSans().fontFamily),
     );
